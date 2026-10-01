@@ -24,3 +24,10 @@ The trade-off is that `toString()` always uses `+` for spaces rather than `%20`.
 ## Edge case to be aware of
 
 A key without an equals sign is parsed as having an empty string value. Round-tripping it produces `key=` rather than the original bare `key`, because the serializer always emits `key=value` pairs.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
